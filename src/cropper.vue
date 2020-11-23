@@ -497,14 +497,13 @@ export default {
       this.$refs.fileInput.click()
     },
 
-    remove () {
+    remove (keepChosenFile = false) {
       if (!this.imageSet) return
       this._setPlaceholders()
 
       let hadImage = this.img != null
       this.originalImage = null
       this.img = null
-      this.$refs.fileInput.value = ''
       this.imgData = {
         width: 0,
         height: 0,
@@ -515,7 +514,10 @@ export default {
       this.scaleRatio = null
       this.userMetadata = null
       this.imageSet = false
-      this.chosenFile = null
+      if (!keepChosenFile) {
+        this.$refs.fileInput.value = ''
+        this.chosenFile = null
+      }
       if (this.video) {
         this.video.pause()
         this.video = null
@@ -707,7 +709,7 @@ export default {
 
     _onload (img, orientation = 1, initial) {
       if (this.imageSet) {
-        this.remove()
+        this.remove(true)
       }
       this.originalImage = img
       this.img = img
